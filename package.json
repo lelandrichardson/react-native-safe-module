@@ -1,0 +1,25 @@
+{
+  "name": "react-native-safe-module",
+  "version": "1.0.0",
+  "description": "A safe way to consume React Native NativeModules",
+  "main": "src/SafeModule.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lelandrichardson/react-native-safe-module.git"
+  },
+  "keywords": [
+    "react-native",
+    "react",
+    "native-modules",
+    "code-push"
+  ],
+  "author": "Leland Richardson <leland.m.richardson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lelandrichardson/react-native-safe-module/issues"
+  },
+  "homepage": "https://github.com/lelandrichardson/react-native-safe-module#readme"
+}
