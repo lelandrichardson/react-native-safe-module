@@ -2,7 +2,7 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 import dedent from 'dedent';
 
 // const AccountModule = SafeModule.create({
-//   moduleName: ['AccountModule', 'AirbnbAccountModuleOldName'],
+//   moduleName: ['SomeNativeModule', 'SomeOldNameOfThatModule'],
 //   isEventEmitter: true,
 //   getVersion: module => module.VERSION,
 //   onInit: (module, version) => {},

@@ -21,5 +21,11 @@
   "bugs": {
     "url": "https://github.com/lelandrichardson/react-native-safe-module/issues"
   },
-  "homepage": "https://github.com/lelandrichardson/react-native-safe-module#readme"
+  "homepage": "https://github.com/lelandrichardson/react-native-safe-module#readme",
+  "peerDependencies": {
+    "react-native": "*"
+  },
+  "dependencies": {
+    "dedent": "^0.6.0"
+  }
 }
