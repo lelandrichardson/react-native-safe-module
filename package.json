@@ -4,7 +4,11 @@
   "description": "A safe way to consume React Native NativeModules",
   "main": "src/SafeModule.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint ./",
+    "test": "npm run --silent lint && npm run --silent test:all",
+    "test:all": "npm run --silent test:base -- --recursive test/",
+    "test:watch": "npm run --silent test:base -- --recursive test/ --watch",
+    "test:base": "mocha --require ./test/_setup.js --require react-native-mock/mock.js --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -27,5 +31,21 @@
   },
   "dependencies": {
     "dedent": "^0.6.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-preset-react-native": "^1.9.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.5.0",
+    "eslint-config-airbnb": "^11.0.0",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.2.1",
+    "eslint-plugin-react": "^6.2.0",
+    "mocha": "^3.0.2",
+    "react": "^15.2.0",
+    "react-native": "^0.30.0",
+    "react-native-mock": "^0.2.6",
+    "sinon": "^1.17.5",
+    "sinon-chai": "^2.8.0"
   }
 }

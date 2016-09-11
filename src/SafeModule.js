@@ -26,9 +26,20 @@ import dedent from 'dedent';
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
+const first = (array, fn) => {
+  let result;
+  let i = 0;
+  /* eslint no-plusplus: 0 */
+  for (; i < array.length; i++) {
+    result = fn(array[i]);
+    if (result) return result;
+  }
+  return null;
+};
+
 const moduleWithName = (nameOrArray) => {
   if (!nameOrArray) return null;
-  if (Array.isArray(nameOrArray)) return nameOrArray.find(moduleWithName);
+  if (Array.isArray(nameOrArray)) return first(nameOrArray, moduleWithName);
   return NativeModules[nameOrArray];
 };
 
@@ -82,7 +93,6 @@ const create = function SafeModuleCreate(options) {
 
   const module = getModule(moduleName, mock);
   const version = getVersion(module);
-  const overrides = versionOverrides[version];
 
   if (__DEV__) {
     Object.keys(module).forEach(key => {
@@ -100,19 +110,27 @@ const create = function SafeModuleCreate(options) {
     result.emitter = new NativeEventEmitter(module);
   }
 
-  if (overrides) {
-    Object.keys(overrides).forEach(key => {
-      if (typeof overrides[key] === 'function') {
-        overrides[key] = overrides[key](module[key], module);
-      }
-    });
+  let overrides;
+  let boundOverrides;
+  if (versionOverrides) {
+    overrides = versionOverrides[version];
+    boundOverrides = {};
+    if (overrides) {
+      Object.keys(overrides).forEach(key => {
+        if (typeof overrides[key] === 'function') {
+          boundOverrides[key] = overrides[key](module[key], module);
+        } else {
+          boundOverrides[key] = overrides[key];
+        }
+      });
+    }
   }
 
   Object.assign(
     result,
     mock,
     module,
-    overrides
+    boundOverrides
   );
 
   return result;
