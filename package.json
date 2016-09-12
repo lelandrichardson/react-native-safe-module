@@ -2,8 +2,10 @@
   "name": "react-native-safe-module",
   "version": "1.0.0",
   "description": "A safe way to consume React Native NativeModules",
-  "main": "src/SafeModule.js",
+  "main": "lib/SafeModule.js",
   "scripts": {
+    "prepublish": "npm run --silent build",
+    "build": "rm -rf lib && babel -d lib src",
     "lint": "eslint ./",
     "test": "npm run --silent lint && npm run --silent test:all",
     "test:all": "npm run --silent test:base -- --recursive test/",
@@ -33,6 +35,7 @@
     "dedent": "^0.6.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-preset-react-native": "^1.9.0",
     "chai": "^3.5.0",
