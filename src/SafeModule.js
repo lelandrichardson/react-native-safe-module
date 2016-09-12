@@ -95,7 +95,7 @@ const create = function SafeModuleCreate(options) {
   const version = getVersion(module);
 
   if (__DEV__) {
-    Object.keys(module).forEach(key => {
+    Object.keys(module).forEach((key) => {
       if (!hasOwnProperty.call(mock, key)) {
         console.warn(dedent`
           ReactNative.NativeModules.${MODULE_NAME}.${key} did not have a corresponding prop defined
@@ -116,7 +116,7 @@ const create = function SafeModuleCreate(options) {
     overrides = versionOverrides[version];
     boundOverrides = {};
     if (overrides) {
-      Object.keys(overrides).forEach(key => {
+      Object.keys(overrides).forEach((key) => {
         if (typeof overrides[key] === 'function') {
           boundOverrides[key] = overrides[key](module[key], module);
         } else {
