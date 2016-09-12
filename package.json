@@ -6,7 +6,7 @@
   "scripts": {
     "prepublish": "npm run --silent build",
     "build": "rm -rf lib && babel -d lib src",
-    "lint": "eslint ./",
+    "lint": "eslint ./src ./test",
     "test": "npm run --silent lint && npm run --silent test:all",
     "test:all": "npm run --silent test:base -- --recursive test/",
     "test:watch": "npm run --silent test:base -- --recursive test/ --watch",
