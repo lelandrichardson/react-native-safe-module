@@ -83,7 +83,7 @@ const create = function SafeModuleCreate(options) {
   }
 
   if (!moduleName) {
-    throw new Error(`
+    throw new Error(dedent`
       SafeModule.module(...) requires a moduleName property to be specified.
     `);
   }
