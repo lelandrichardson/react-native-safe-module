@@ -26,6 +26,12 @@ import dedent from 'dedent';
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
+const UNMOCKED_PROPERTY_WHITELIST = {
+  VERSION: true,
+  addListener: true,
+  removeListeners: true,
+};
+
 const first = (array, fn) => {
   let result;
   let i = 0;
@@ -59,7 +65,7 @@ const defaultGetVersion = module => module.VERSION;
 const create = function SafeModuleCreate(options) {
   if (!options) {
     throw new Error(dedent`
-      SafeModule.create(...) was invoked without any options parameter.
+      SafeModule.module(...) was invoked without any options parameter.
     `);
   }
   const {
@@ -78,7 +84,7 @@ const create = function SafeModuleCreate(options) {
 
   if (!moduleName) {
     throw new Error(`
-      SafeModule.create(...) requires a moduleName property to be specified.
+      SafeModule.module(...) requires a moduleName property to be specified.
     `);
   }
   const MODULE_NAME = getPrimaryName(moduleName);
@@ -96,7 +102,7 @@ const create = function SafeModuleCreate(options) {
 
   if (__DEV__) {
     Object.keys(module).forEach((key) => {
-      if (!hasOwnProperty.call(mock, key)) {
+      if (!hasOwnProperty.call(mock, key) && !UNMOCKED_PROPERTY_WHITELIST[key]) {
         console.warn(dedent`
           ReactNative.NativeModules.${MODULE_NAME}.${key} did not have a corresponding prop defined
           in the mock provided to SafeModule.
@@ -136,6 +142,4 @@ const create = function SafeModuleCreate(options) {
   return result;
 };
 
-const SafeModule = { create };
-
-module.exports = SafeModule;
+module.exports = create;

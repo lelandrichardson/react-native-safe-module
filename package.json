@@ -2,7 +2,7 @@
   "name": "react-native-safe-module",
   "version": "1.0.0",
   "description": "A safe way to consume React Native NativeModules",
-  "main": "lib/SafeModule.js",
+  "main": "lib/index.js",
   "scripts": {
     "prepublish": "npm run --silent build",
     "build": "rm -rf lib && babel -d lib src",

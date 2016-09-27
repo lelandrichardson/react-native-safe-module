@@ -1,7 +1,7 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import SafeModule from '../src/SafeModule';
+import SafeModule from '../src';
 
 let i = 1;
 const uniqueModuleName = () => {
