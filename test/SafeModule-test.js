@@ -163,6 +163,21 @@ describe('SafeModule', () => {
     expect(result.emitter).instanceOf(NativeEventEmitter);
   });
 
+  it('mock has EventEmitter methods when isEventEmitter=true', () => {
+    const moduleName = uniqueModuleName();
+    const mock = {
+      foo: sinon.spy(),
+    };
+    const result = SafeModule.create({
+      moduleName,
+      mock,
+      isEventEmitter: true,
+    });
+    expect(result.emitter).instanceOf(NativeEventEmitter);
+    expect(result.addListener).to.be.a('function');
+    expect(result.removeListeners).to.be.a('function');
+  });
+
   it('falls back to older module name if newer name isnt present', () => {
     const moduleName1 = uniqueModuleName();
     const moduleName2 = uniqueModuleName();

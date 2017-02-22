@@ -32,6 +32,11 @@ const UNMOCKED_PROPERTY_WHITELIST = {
   removeListeners: true,
 };
 
+const eventEmitterMock = {
+  addListener() {},
+  removeListeners() {},
+};
+
 const first = (array, fn) => {
   let result;
   let i = 0;
@@ -53,10 +58,15 @@ const getPrimaryName = (nameOrArray) => {
   return Array.isArray(nameOrArray) ? getPrimaryName(nameOrArray[0]) : nameOrArray;
 };
 
-const getModule = (moduleNameOrNames, mock) => {
+const getModule = (moduleNameOrNames, mock, isEventEmitter) => {
   const module = moduleWithName(moduleNameOrNames);
   // TODO: in __DEV__, we should console.warn if anything but the first module got used.
-  return module || mock;
+  if (module) return module;
+  // For Platform.OS === 'ios', we must ensure that `module` contains event
+  // emitter methods expected by `NativeEventEmitter`, even in the case of a
+  // mock. Otherwise, calling the emitter will throw an error.
+  if (isEventEmitter) return Object.assign({}, mock, eventEmitterMock);
+  return mock;
 };
 
 const defaultGetVersion = module => module.VERSION;
@@ -97,7 +107,7 @@ const create = function SafeModuleCreate(options) {
 
   const result = {};
 
-  const module = getModule(moduleName, mock);
+  const module = getModule(moduleName, mock, isEventEmitter);
   const version = getVersion(module);
 
   if (__DEV__) {
