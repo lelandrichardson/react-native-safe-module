@@ -1,6 +1,8 @@
 import {
   requireNativeComponent,
   UIManager,
+  findNodeHandle,
+  Platform,
 } from 'react-native';
 import dedent from 'dedent';
 import SafeModule from './SafeModule';
@@ -103,6 +105,27 @@ function SafeComponentCreate(options) {
   const nativeComponent = requireNativeComponent(realViewName);
 
   let result = nativeComponent;
+
+  result.runCommand = (instance, name, ...args) => {
+    return Platform.select({
+      android: () => UIManager.dispatchViewManagerCommand(
+        findNodeHandle(instance),
+        UIManager[realViewName].Commands[name],
+        args
+      ),
+      ios: () => nativeModule[name](findNodeHandle(instance), ...args),
+      default: () => {},
+    })();
+  };
+
+  result.updateView = (instance, props) => {
+    const native = () => UIManager.updateView(findNodeHandle(instance), realViewName, props);
+    Platform.select({
+      ios: native,
+      android: native,
+      default: () => {},
+    })();
+  };
 
   if (componentOverrides) {
     const overrides = componentOverrides[version];
