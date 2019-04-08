@@ -18,10 +18,20 @@ const first = (array, fn) => {
   return null;
 };
 
+const getViewManagerConfig = (moduleName) => {
+  if (UIManager.getViewManagerConfig) {
+    // RN >= 0.58
+    return UIManager.getViewManagerConfig(moduleName)
+  }
+
+  // RN < 0.58
+  return UIManager[moduleName];
+};
+
 const moduleWithName = (nameOrArray) => {
   if (!nameOrArray) return null;
   if (Array.isArray(nameOrArray)) return first(nameOrArray, moduleWithName);
-  return UIManager[nameOrArray];
+  return getViewManagerConfig(nameOrArray);
 };
 
 const findFirstResolver = namespace => function findFirstOnNamespace(nameOrArray) {
@@ -74,7 +84,7 @@ function SafeComponentCreate(options) {
   const PRIMARY_VIEW_NAME = getPrimaryName(viewName);
 
   const realViewName = findFirstViewName(viewName);
-  const realViewConfig = UIManager[realViewName];
+  const realViewConfig = getViewManagerConfig(realViewName);
 
   if (!realViewName || !realViewConfig) {
     return mockComponent;
@@ -110,7 +120,7 @@ function SafeComponentCreate(options) {
     return Platform.select({
       android: () => UIManager.dispatchViewManagerCommand(
         findNodeHandle(instance),
-        UIManager[realViewName].Commands[name],
+        getViewManagerConfig(realViewName).Commands[name],
         args
       ),
       ios: () => nativeModule[name](findNodeHandle(instance), ...args),
