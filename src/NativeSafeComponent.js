@@ -21,7 +21,7 @@ const first = (array, fn) => {
 const moduleWithName = (nameOrArray) => {
   if (!nameOrArray) return null;
   if (Array.isArray(nameOrArray)) return first(nameOrArray, moduleWithName);
-  return UIManager[nameOrArray];
+  return safeGetViewManagerConfig(nameOrArray);
 };
 
 const findFirstResolver = namespace => function findFirstOnNamespace(nameOrArray) {
@@ -37,6 +37,15 @@ const getPrimaryName = (nameOrArray) => {
 };
 
 const defaultGetVersion = module => module.VERSION;
+
+const safeGetViewManagerConfig = (moduleName) => {
+  if (UIManager.getViewManagerConfig) {
+    // RN >= 0.58
+    return UIManager.getViewManagerConfig(moduleName);
+  }
+  // RN < 0.58
+  return UIManager[moduleName];
+};
 
 function SafeComponentCreate(options) {
   if (!options) {
@@ -74,7 +83,7 @@ function SafeComponentCreate(options) {
   const PRIMARY_VIEW_NAME = getPrimaryName(viewName);
 
   const realViewName = findFirstViewName(viewName);
-  const realViewConfig = UIManager[realViewName];
+  const realViewConfig = safeGetViewManagerConfig(realViewName);
 
   if (!realViewName || !realViewConfig) {
     return mockComponent;
